@@ -70,6 +70,7 @@ model = nn.Sequential(
     nn.ReLU(),
     nn.Linear(in_features=256, out_features=10),
     
+    
 )
 # class model(nn.Module):
 #     def __init__(self):
