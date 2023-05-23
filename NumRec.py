@@ -42,21 +42,58 @@ test = [image_tensors[i][800:] for i in range(10)]
 
 print(num_features)
 # Lets create our model
-class NumberRecognition(nn.Module):
-    def __init__(self, num_features):
-        super(NumberRecognition, self).__init__()
-        self.layer_1 = nn.Linear(in_features = num_features, out_features = 1000 )
-        self.layer_2 = nn.Linear(in_features = 1000, out_features = 10)
-    def forward(self, x):
-        return self.layer_2(self.layer_1(x))
-
-
+# class NumberRecognition(nn.Module):
+#     def __init__(self, num_features):
+#         super(NumberRecognition, self).__init__()
+#         self.layer_1 = nn.Linear(in_features = num_features, out_features = 1000 )
+#         self.layer_2 = nn.Linear(in_features = 1000, out_features = 10)
+#     def forward(self, x):
+#         return self.layer_2(self.layer_1(x))
+model = nn.Sequential(
+    nn.Linear(in_features=num_features, out_features=256),
+    nn.ReLU(),
+    nn.Linear(in_features=256, out_features=1000),
+    nn.ReLU(),
+    nn.Linear(in_features=1000, out_features=6000),
+    nn.ReLU(), 
+    nn.Linear(in_features=6000, out_features=12000),
+    nn.ReLU(),
+    nn.Linear(in_features=12000, out_features=18000),
+    nn.ReLU(),
+    nn.Linear(in_features=18000, out_features=12000),
+    nn.ReLU(),
+    nn.Linear(in_features=12000, out_features=6000),
+    nn.ReLU(),
+    nn.Linear(in_features=6000, out_features=1000),
+    nn.ReLU(),
+    nn.Linear(in_features=1000, out_features=256),
+    nn.ReLU(),
+    nn.Linear(in_features=256, out_features=10),
+    
+)
+# class model(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.layer_1 = nn.Linear(in_features=num_features,out_features=256)
+#         self.layer_2 = nn.Linear(in_features=256, out_features=1000)
+#         self.layer_3 = nn.Linear(in_features=1000, out_features=4000)
+#         self.layer_4 = nn.Linear(in_features=4000, out_features=1000)
+#         self.layer_5 = nn.Linear(in_features=1000, out_features=256)
+#         self.layer_6 = nn.Linear(in_features=256, out_features=10)
+#     def forward(self,x):
+#         z = self.layer_1(x)
+#         z = self.layer_2(z)
+#         z = self.layer_3(z)
+#         z = self.layer_4(z)
+#         z = self.layer_5(z)
+#         z = self.layer_6(z)
+#         return z
 # Lets create our train loop
 
 num_classes = 10  # We have 10 classes for digit recognition (0-9)
 
 # Define خعق neural network model
-model = NumberRecognition(num_features)  
+  
 model = torch.load("save.pt")
 
 # Define the loss function
@@ -108,7 +145,6 @@ with torch.inference_mode():
         loss = criterion(outputs, labels)
         print(f"{x}- output is {torch.argmax(outputs)} and label is {labels[0]}")
         print(f"Loss of number {x} is {loss}\n")
-
 plt.plot(epoch_count, train_loss_values , label="Train loss")
 plt.title("Training curves") 
 plt.ylabel("Loss")
